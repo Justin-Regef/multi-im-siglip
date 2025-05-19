@@ -55,6 +55,14 @@ except ImportError:
     )
 
 
+# TODO: adapt the dataset and dataloader
+# Right now, it's assuming the multiple images for a same text are in seperate lines of the csv
+# I want them to be in the same line, and I want to guarantee that within a given batch with that text,
+# **every** image associated with that text ought to appear
+# As such, the getitem should return 1 text and 1 to many images
+# The dataloader should figure out how to make sensible batches with that (batch size = number of texts <= number of images)
+# thus, will also need to have a ceiling value for the number of images to not blow up the gpu
+# (or just use the ceiling number of images as the batch size, and be ok with fewer text)
 class CsvDatasetForAmbiguity(Dataset):
     def __init__(self, input_filename, transforms, img_key, caption_key, sep="\t"):
         """
